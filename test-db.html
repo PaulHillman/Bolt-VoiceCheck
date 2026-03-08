@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Test</title>
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+        const supabase = createClient(
+            'https://lnaquzxwvnjycrmvkayt.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxuYXF1enh3dm5qeWNybXZrYXl0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MTExMzYsImV4cCI6MjA4Njk4NzEzNn0.rqig0h6ZDVfQK9u2Fs7zDXtUG29Y7V3HcSEmWGzCGX0'
+        )
+
+        async function testDatabase() {
+            console.log('Testing database connection...')
+            const { data, error } = await supabase
+                .from('students')
+                .select('id, name, email')
+                .limit(5)
+
+            console.log('Data:', data)
+            console.log('Error:', error)
+
+            const output = document.getElementById('output')
+            if (error) {
+                output.innerHTML = `<pre style="color: red;">ERROR: ${JSON.stringify(error, null, 2)}</pre>`
+            } else {
+                output.innerHTML = `<pre style="color: green;">SUCCESS: Found ${data.length} students\n${JSON.stringify(data, null, 2)}</pre>`
+            }
+        }
+
+        window.addEventListener('load', testDatabase)
+    </script>
+</head>
+<body style="font-family: monospace; padding: 20px;">
+    <h1>Database Connection Test</h1>
+    <div id="output">Loading...</div>
+</body>
+</html>
